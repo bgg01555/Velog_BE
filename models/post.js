@@ -17,10 +17,10 @@ const postSchema = mongoose.Schema({
 },{ timestamps: true });
 
 
-UserSchema.virtual("postId").get(function () {
+postSchema.virtual("postId").get(function () {
     return this._id.toHexString();
 });
-UserSchema.set("toJSON", {
+postSchema.set("toJSON", {
     virtuals: true,
 });
 
@@ -34,4 +34,4 @@ postSchema.pre(
 );
 
 
-module.exports = mongoose.model("Articles", ArticleSchema);
+module.exports = mongoose.model("Posts", postSchema);

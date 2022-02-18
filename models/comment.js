@@ -16,10 +16,10 @@ const CommentSchema = mongoose.Schema({
 { timestamps: true }
 );
 
-UserSchema.virtual("commentId").get(function () {
+CommentSchema.virtual("commentId").get(function () {
     return this._id.toHexString();
 });
-UserSchema.set("toJSON", {
+CommentSchema.set("toJSON", {
     virtuals: true,
 });
 
