@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Comment = require('../models/comment');
 
 const postSchema = mongoose.Schema({
-    username: {
+    userId: {
         type: String,
         required: true,
     },
@@ -14,6 +14,24 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    tag:{
+        type:Array,
+        required:true,
+    },
+    thumbnail:{
+        type:String,
+        required:true,
+    },
+    introduce:{
+        type:String,
+        required:true
+    },
+    likeCount:{
+        type:Number,
+        default:0
+    }
+
+
 },{ timestamps: true });
 
 
