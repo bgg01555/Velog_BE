@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Comment = require('../models/comment');
 
 const postSchema = mongoose.Schema({
-    username: {
+    userId: {
         type: String,
         required: true,
     },
@@ -10,17 +10,28 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    tag : {
+        type: Array,
+    },
     contents: {
         type: String,
+        required: true,
+    },
+    // thumbnail : {
+    //     type : FormData(),
+    //     required: true,
+    // },
+    introduce : {
+        type : String,
         required: true,
     },
 },{ timestamps: true });
 
 
-UserSchema.virtual("postId").get(function () {
+postSchema.virtual("postId").get(function () {
     return this._id.toHexString();
 });
-UserSchema.set("toJSON", {
+postSchema.set("toJSON", {
     virtuals: true,
 });
 
@@ -34,4 +45,4 @@ postSchema.pre(
 );
 
 
-module.exports = mongoose.model("Articles", ArticleSchema);
+module.exports = mongoose.model("Post", postSchema);

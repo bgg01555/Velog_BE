@@ -16,12 +16,7 @@ const CommentSchema = mongoose.Schema({
 { timestamps: true }
 );
 
-UserSchema.virtual("commentId").get(function () {
-    return this._id.toHexString();
-});
-UserSchema.set("toJSON", {
-    virtuals: true,
-});
+
 
 
 module.exports = mongoose.model("Comments", CommentSchema);
