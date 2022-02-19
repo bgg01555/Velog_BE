@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/post')
 const auth = require("../middlewares/auth-middleware");
-const cors = require('cors');
-const res = require('express/lib/response');
 const time2str = require('../modules/time2str');
 
 
@@ -45,17 +43,29 @@ router.get("/:postId", async (req, res) => {
 })
 //특정 게시물 수정
 router.patch('/:postId', auth, async (req, res) => {
-    const { postId, title, tag, contents, thumbnail, introduce } = req.body;
-    const targetPost = await Post.findOne({ _id: postId })
+    const {user} = res.locals;
+    const {postId} = req.params;
+    const {title, tag, contents, thumbnail, introduce } = req.body;
+
+
+    const targetPost = await Post.findOne({ _id: postId });
+
     if ( !targetPost ) {
         return res.status(400).json({
             message: "다시 시도해주세요."
         })
     } else {
-        await Post.updateOne({ _id : postId }, { $set: { title, tag, contents, thumbnail, introduce } })
-        res.status(200).json({
-            message: "게시물이 수정되었습니다."
-        })
+        if(user.userId===targetPost.userId){
+            await Post.updateOne({ _id : postId }, { $set: { title, tag, contents, thumbnail, introduce } })
+            res.status(200).json({
+                message: "게시물이 수정되었습니다."
+            })    
+        }
+        else{
+            return res.status(400).json({
+                message: "수정 권한이 없습니다."
+            })
+        }
     }
 })
 
@@ -68,10 +78,15 @@ router.delete("/:postId", auth, async (req, res) => {
     if (!targetPost) {
         return res.status(400).send({ message: '다시 시도해주세요.' })
     } else { 
-        await Post.deleteOne({ _id : postId }) 
-        res.send({
-            message: '게시물이 삭제되었습니다.'
-        })
+        if(user.userId===targetPost.userId){
+            await Post.deleteOne({ _id : postId }) 
+            res.send({
+                message: '게시물이 삭제되었습니다.'
+            })
+        }
+        else{
+            return res.status(400).send({ message: '삭제 권한이 없습니다.' })
+        }
     }
 })
 module.exports = router;

@@ -8,7 +8,6 @@ const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 const commentRouter = require("./routes/comment");
 //require('dotenv').config()
-
 connect();
 
 
