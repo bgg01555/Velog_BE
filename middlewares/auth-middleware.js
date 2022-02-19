@@ -21,8 +21,10 @@ module.exports = (req, res, next) => {
 
     try {
         //const decoded = jwt.verify(tokenValue, "secret-juhyeon");
-        const { username } = jwt.verify(tokenValue, "my-secret-key");
-        User.findOne({ username }).exec().then((user) => {
+        
+        const { userId } = jwt.verify(tokenValue, "my-secret-key");
+        
+        User.findOne({ userId }).exec().then((user) => {
             res.locals.user = user;
 
             next();
