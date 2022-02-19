@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Comment = require('../models/comment');
 
 const postSchema = mongoose.Schema({
+ 
     userId: {
         type: String,
         required: true,
@@ -25,11 +26,11 @@ const postSchema = mongoose.Schema({
     introduce:{
         type:String,
         required:true
-    },
-    likeCount:{
-        type:Number,
-        default:0
     }
+    // likeCount:{
+    //     type:Number,
+    //     default:0
+    // }
 
 
 },{ timestamps: true });
@@ -41,6 +42,9 @@ postSchema.virtual("postId").get(function () {
 postSchema.set("toJSON", {
     virtuals: true,
 });
+// postSchema.set("toObject", {
+//     virtuals: true,
+// });
 
 postSchema.pre(
     "deleteOne", { document: false, query: true },
