@@ -11,13 +11,12 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    tag : {
+        type: Array,
+    },
     contents: {
         type: String,
         required: true,
-    },
-    tag:{
-        type:Array,
-        required:true,
     },
     thumbnail:{
         type:String,
@@ -31,8 +30,6 @@ const postSchema = mongoose.Schema({
     //     type:Number,
     //     default:0
     // }
-
-
 },{ timestamps: true });
 
 
