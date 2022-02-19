@@ -17,14 +17,18 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    // thumbnail : {
-    //     type : FormData(),
-    //     required: true,
-    // },
-    introduce : {
-        type : String,
-        required: true,
+    thumbnail:{
+        type:String,
+        required:true,
     },
+    introduce:{
+        type:String,
+        required:true
+    },
+    likeCount:{
+        type:Number,
+        default:0
+    }
 },{ timestamps: true });
 
 
@@ -45,4 +49,4 @@ postSchema.pre(
 );
 
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model("Posts", postSchema);

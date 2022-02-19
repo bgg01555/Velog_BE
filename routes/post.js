@@ -14,8 +14,8 @@ router.post('/', async (req, res) => { // 게시물 작성
         title,
         tag,
         contents,
-        // thumbnail,
-        introduce 
+        thumbnail,
+        introduce
     });
 
     res.status(200).json({ mssage: "게시물이 저장되었습니다."});

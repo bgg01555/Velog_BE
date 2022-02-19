@@ -16,6 +16,12 @@ const CommentSchema = mongoose.Schema({
 { timestamps: true }
 );
 
+CommentSchema.virtual("commentId").get(function () {
+    return this._id.toHexString();
+});
+CommentSchema.set("toJSON", {
+    virtuals: true,
+});
 
 
 
