@@ -4,6 +4,7 @@ const Post = require('../models/post')
 const auth = require("../middlewares/auth-middleware");
 const cors = require('cors');
 const res = require('express/lib/response');
+const time2str = require('../modules/time2str');
 
 
 //게시물 작성
@@ -26,19 +27,22 @@ router.post('/', async (req, res) => {
 //전체 게시물 조회
 router.get('/', async (req, res) => {
     const posts = await Post.find({})
-    res.status(200).json({ posts })
+    for(let i=0;i<posts.length;i++){
+        posts[i]._doc.pastTime = time2str(posts[i].createdAt);
+    }
+    res.status(200).json({ posts });
 })
 
 
 //특정 게시물 조회
-router.get("/post/:postId", async (req, res) => {
+router.get("/:postId", async (req, res) => {
     const { postId } = req.params
-    const [post] = await Post.findOne({ postId })
+    const post = await Post.findOne({ postId })
+    post._doc.pastTime=time2str(post.createdAt);
     res.status(200).json({
         post
     })
 })
-
 //특정 게시물 수정
 router.patch('/:postId', async (req, res) => {
     const { postId, title, tag, contents, thumbnail, introduce } = req.body;
