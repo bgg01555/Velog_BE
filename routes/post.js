@@ -5,13 +5,14 @@ const auth = require("../middlewares/auth-middleware");
 const cors = require('cors');
 const res = require('express/lib/response');
 
-router.post('/', async (req, res) => { // 게시물 작성
-    const {  userId,title, tag, contents, thumbnail, introduce  } = req.body;
-    // let { user } = res.locals
+
+//게시물 작성
+router.post('/', async (req, res) => {
+    const {  userId, title, tag, contents, thumbnail, introduce  } = req.body;
+    // const userId = res.locals.user.userId
 
     await Post.create({
-        userId,//test용
-        // userId: user.userId,
+        userId,
         title,
         tag,
         contents,
@@ -22,8 +23,51 @@ router.post('/', async (req, res) => { // 게시물 작성
     res.status(200).json({ mssage: "게시물이 저장되었습니다."});
 });
 
+//전체 게시물 조회
 router.get('/', async (req, res) => {
     const posts = await Post.find({})
     res.status(200).json({ posts })
+})
+
+
+//특정 게시물 조회
+router.get("/post/:postId", async (req, res) => {
+    const { postId } = req.params
+    const [post] = await Post.findOne({ postId })
+    res.status(200).json({
+        post
+    })
+})
+
+//특정 게시물 수정
+router.patch('/:postId', async (req, res) => {
+    const { postId, title, tag, contents, thumbnail, introduce } = req.body;
+    const targetPost = await Post.findOne({ postId })
+    if ( !targetPost ) {
+        return res.status(400).json({
+            message: "다시 시도해주세요."
+        })
+    } else {
+        await Post.updateOne({ _id : postId }, { $set: { title, tag, contents, thumbnail, introduce } })
+        res.status(200).json({
+            message: "게시물이 수정되었습니다."
+        })
+    }
+})
+
+//특정 게시물 삭제
+router.delete("/:postId", async (req, res) => {
+    const { postId } = req.params
+
+    const targetPost = await Post.findOne({ postId })
+
+    if (!targetPost) {
+        return res.status(400).send({ message: '다시 시도해주세요.' })
+    } else { 
+        await Post.deleteOne({ _id : postId }) 
+        res.send({
+            message: '게시물이 삭제되었습니다.'
+        })
+    }
 })
 module.exports = router;
