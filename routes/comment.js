@@ -3,12 +3,19 @@ const Comment = require('../models/comment');
 const Post = require('../models/post');
 const authMiddleware = require('../middlewares/auth-middleware');
 const router = express.Router();
+const time2str = require('../modules/time2str');
 
 //댓글 불러오기 past time 작성 예정
 router.get('/:postId',async (req,res)=>{
     const {postId} = req.params;
     try{
+
         const comments = await Comment.find({postId:postId});
+        for(let i=0;i<comments.length;i++){
+            //console.log(time2str(comments[i].createdAt));
+            comments[i]._doc.pastTime = time2str(comments[i].createdAt);    
+        }
+
         return res.json({comments});
     }
     catch(e){

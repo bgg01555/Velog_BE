@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
     if (authorization === undefined) {
         res.status(400).json({ errorMessage: '로그인 후 사용하시오' })
         return;
-
     }
 
     const [tokenType, tokenValue] = authorization.split(' ');
@@ -20,8 +19,6 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        //const decoded = jwt.verify(tokenValue, "secret-juhyeon");
-        
         const { userId } = jwt.verify(tokenValue, "my-secret-key");
         
         User.findOne({ userId }).exec().then((user) => {
