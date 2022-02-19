@@ -72,6 +72,7 @@ router.patch('/:postId', auth, async (req, res) => {
 //특정 게시물 삭제
 router.delete("/:postId", auth, async (req, res) => {
     const { postId } = req.params
+    const {user} = res.locals;
 
     const targetPost = await Post.findOne({ _id: postId })
 
