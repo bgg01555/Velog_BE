@@ -8,12 +8,12 @@ const time2str = require('../modules/time2str');
 
 
 //게시물 작성
-router.post('/', async (req, res) => {
-    const {  userId, title, tag, contents, thumbnail, introduce  } = req.body;
-    // const userId = res.locals.user.userId
+router.post('/', auth, async (req, res) => {
+    const { title, tag, contents, thumbnail, introduce  } = req.body;
+    const { user } = res.locals
 
     await Post.create({
-        userId,
+        userId: user.userId,
         title,
         tag,
         contents,
@@ -37,16 +37,16 @@ router.get('/', async (req, res) => {
 //특정 게시물 조회
 router.get("/:postId", async (req, res) => {
     const { postId } = req.params
-    const post = await Post.findOne({ postId })
+    const post = await Post.findOne({ _id: postId })
     post._doc.pastTime=time2str(post.createdAt);
     res.status(200).json({
         post
     })
 })
 //특정 게시물 수정
-router.patch('/:postId', async (req, res) => {
+router.patch('/:postId', auth, async (req, res) => {
     const { postId, title, tag, contents, thumbnail, introduce } = req.body;
-    const targetPost = await Post.findOne({ postId })
+    const targetPost = await Post.findOne({ _id: postId })
     if ( !targetPost ) {
         return res.status(400).json({
             message: "다시 시도해주세요."
@@ -60,10 +60,10 @@ router.patch('/:postId', async (req, res) => {
 })
 
 //특정 게시물 삭제
-router.delete("/:postId", async (req, res) => {
+router.delete("/:postId", auth, async (req, res) => {
     const { postId } = req.params
 
-    const targetPost = await Post.findOne({ postId })
+    const targetPost = await Post.findOne({ _id: postId })
 
     if (!targetPost) {
         return res.status(400).send({ message: '다시 시도해주세요.' })
