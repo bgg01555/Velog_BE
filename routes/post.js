@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 
 
 //특정 게시물 조회
-router.get("/post/:postId", async (req, res) => {
+router.get("/:postId", async (req, res) => {
     const { postId } = req.params
     const [post] = await Post.findOne({ postId })
     res.status(200).json({
