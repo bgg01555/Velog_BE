@@ -13,7 +13,7 @@ router.use(express.urlencoded({ extended: true }));
 const validation = joi.object({
     userId: joi.string().pattern(/[A-Za-z0-9가-힣]/).min(2).max(12).required(),
     userMail: joi.string().email().trim(true).required(),
-    passWord: joi.string().pattern(/[A-Za-z]+[0-9]+[!?@#$_]+/).min(8).max(16).required()
+    passWord: joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!?@#$_])[A-Za-z\d!?@#$_]{8,16}$/).required()
 });
 
 // 회원가입 API
