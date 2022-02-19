@@ -12,7 +12,6 @@ router.get('/:postId',async (req,res)=>{
 
         const comments = await Comment.find({postId:postId});
         for(let i=0;i<comments.length;i++){
-            //console.log(time2str(comments[i].createdAt));
             comments[i]._doc.pastTime = time2str(comments[i].createdAt);    
         }
 
