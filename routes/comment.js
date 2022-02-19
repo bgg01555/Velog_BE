@@ -49,8 +49,6 @@ router.patch('/:commentId',authMiddleware, async (req,res)=>{
 
     try {
         const findComment = await Comment.findOne({_id:commentId});
-        console.log(findComment,user);
-        console.log(findComment.userId,user.userId);
 
         if (findComment.userId === user.userId) {
             await Comment.findByIdAndUpdate({ _id: commentId },{ $set: { comment } }).exec();
