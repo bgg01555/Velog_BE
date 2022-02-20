@@ -1,11 +1,9 @@
 const express = require('express');
 const Comment = require('../models/comment');
-//const Post = require('../models/post');
 const authMiddleware = require('../middlewares/auth-middleware');
 const router = express.Router();
 const time2str = require('../modules/time2str');
 
-//댓글 불러오기 past time 작성 예정
 router.get('/:postId', async (req, res) => {
     const { postId } = req.params;
     try {

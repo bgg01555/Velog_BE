@@ -5,14 +5,13 @@ const Comment = require('../models/comment');
 const auth = require('../middlewares/auth-middleware');
 const time2str = require('../modules/time2str');
 const upload = require('../modules/multer');
-//const foo = 'test';
 
-router.post('/imagetest', upload.single('image'), (req) => {
-    console.log(req.file);
+router.post('/imagetest', upload.single('image'), (req, res) => {
+    res.json({ url: req.file.location });
 });
 
 //게시물 작성
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', auth, upload.single('image'), async (req, res) => {
     const { title, tag, contents, introduce } = req.body;
     const thumbnail = req.file.location;
     const { user } = res.locals;
