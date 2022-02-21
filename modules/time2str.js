@@ -8,9 +8,9 @@ function time2str(date) {
     if (time < 24) {
         return parseInt(time) + '시간 전';
     }
-    time = time / 24
+    time = time / 24;
     if (time < 8) {
-        return parseInt(time) + "일 전"
+        return parseInt(time) + '일 전';
     }
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 }
