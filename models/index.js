@@ -1,6 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const connect = () => {
-    mongoose.connect(`mongodb://bgg01578:wngus4582@13.125.157.182/myVelog?authSource=admin`, { ignoreUndefined: true }).catch(err => console.log(err));
+    mongoose
+        .connect(process.env.MONGO_DB_CONNECT, {
+            ignoreUndefined: true,
+        })
+        .catch((err) => console.log(err));
 };
 module.exports = connect;
