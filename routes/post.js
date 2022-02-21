@@ -11,9 +11,8 @@ router.post('/imagetest', upload.single('image'), (req, res) => {
 });
 
 //게시물 작성
-router.post('/', auth, upload.single('image'), async (req, res) => {
-    const { title, tag, contents, introduce } = req.body;
-    const thumbnail = req.file.location;
+router.post('/', auth, async (req, res) => {
+    const { title, tag, contents, thumbnail, introduce } = req.body;
     const { user } = res.locals;
 
     await Post.create({
@@ -50,11 +49,10 @@ router.get('/:postId', async (req, res) => {
 });
 
 //특정 게시물 수정
-router.patch('/:postId', auth, upload.single('image'), async (req, res) => {
+router.patch('/:postId', auth, async (req, res) => {
     const { user } = res.locals;
     const { postId } = req.params;
-    const { title, tag, contents, introduce } = req.body;
-    const thumbnail = req.file.location;
+    const { title, tag, contents, introduce, thumbnail } = req.body;
     const targetPost = await Post.findOne({ _id: postId });
 
     if (!targetPost) {
