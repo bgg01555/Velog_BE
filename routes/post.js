@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/post');
 const Comment = require('../models/comment');
-const auth = require('../middlewares/auth-middleware');
+//const auth = require('../middlewares/auth-middleware');
 const time2str = require('../modules/time2str');
 const upload = require('../modules/multer');
 
@@ -51,11 +51,12 @@ router.get('/:postId', async (req, res) => {
 });
 
 //특정 게시물 수정
-router.patch('/:postId', auth, async (req, res) => {
+router.patch('/:postId', upload.single('image'), async (req, res) => {
     //const { user } = res.locals;
 
     const { postId } = req.params;
-    const { title, tag, contents, thumbnail, introduce } = req.body;
+    const { title, tag, contents, introduce } = req.body;
+    const thumbnail = req.file.location;
 
     const targetPost = await Post.findOne({ _id: postId });
 
