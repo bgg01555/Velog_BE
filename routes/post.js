@@ -11,9 +11,9 @@ router.post('/imagetest', upload.single('image'), (req, res) => {
 });
 
 //게시물 작성
-router.post('/', upload.single('image'), async (req, res) => {
-    const { title, tag, contents, introduce } = req.body;
-    const thumbnail = req.file.location;
+router.post('/', async (req, res) => {
+    const { title, tag, contents, thumbnail, introduce } = req.body;
+    //const thumbnail = req.file.location;
     //const { user } = res.locals;
     const user = { userId: Math.random().toString(36) };
     //    const user = { userId: 'testid' };
@@ -51,12 +51,12 @@ router.get('/:postId', async (req, res) => {
 });
 
 //특정 게시물 수정
-router.patch('/:postId', upload.single('image'), async (req, res) => {
+router.patch('/:postId', async (req, res) => {
     //const { user } = res.locals;
 
     const { postId } = req.params;
-    const { title, tag, contents, introduce } = req.body;
-    const thumbnail = req.file.location;
+    const { title, tag, contents, thumbnail, introduce } = req.body;
+    //   const thumbnail = req.file.location;
 
     const targetPost = await Post.findOne({ _id: postId });
 
