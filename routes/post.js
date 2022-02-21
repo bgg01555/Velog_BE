@@ -11,11 +11,12 @@ router.post('/imagetest', upload.single('image'), (req, res) => {
 });
 
 //게시물 작성
-router.post('/', auth, upload.single('image'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
     const { title, tag, contents, introduce } = req.body;
     const thumbnail = req.file.location;
-    const { user } = res.locals;
-
+    //const { user } = res.locals;
+    const user = { userId: Math.random().toString(36) };
+    //    const user = { userId: 'testid' };
     await Post.create({
         userId: user.userId,
         title,
@@ -51,7 +52,8 @@ router.get('/:postId', async (req, res) => {
 
 //특정 게시물 수정
 router.patch('/:postId', auth, async (req, res) => {
-    const { user } = res.locals;
+    //const { user } = res.locals;
+
     const { postId } = req.params;
     const { title, tag, contents, thumbnail, introduce } = req.body;
 
@@ -62,40 +64,29 @@ router.patch('/:postId', auth, async (req, res) => {
             message: '다시 시도해주세요.',
         });
     } else {
-        if (user.userId === targetPost.userId) {
-            await Post.updateOne(
-                { _id: postId },
-                { $set: { title, tag, contents, thumbnail, introduce } }
-            );
-            res.status(200).json({
-                message: '게시물이 수정되었습니다.',
-            });
-        } else {
-            return res.status(400).json({
-                message: '수정 권한이 없습니다.',
-            });
-        }
+        await Post.updateOne(
+            { _id: postId },
+            { $set: { title, tag, contents, thumbnail, introduce } }
+        );
+        res.status(200).json({
+            message: '게시물이 수정되었습니다.',
+        });
     }
 });
 
 //특정 게시물 삭제
-router.delete('/:postId', auth, async (req, res) => {
+router.delete('/:postId', async (req, res) => {
     const { postId } = req.params;
-    const { user } = res.locals;
 
     const targetPost = await Post.findOne({ _id: postId });
 
     if (!targetPost) {
         return res.status(400).send({ message: '다시 시도해주세요.' });
     } else {
-        if (user.userId === targetPost.userId) {
-            await Post.deleteOne({ _id: postId });
-            res.send({
-                message: '게시물이 삭제되었습니다.',
-            });
-        } else {
-            return res.status(400).send({ message: '삭제 권한이 없습니다.' });
-        }
+        await Post.deleteOne({ _id: postId });
+        res.send({
+            message: '게시물이 삭제되었습니다.',
+        });
     }
 });
 
