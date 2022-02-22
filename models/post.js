@@ -26,10 +26,10 @@ const postSchema = mongoose.Schema(
             type: String,
             required: true,
         },
-        // likeCount:{
-        //     type:Number,
-        //     default:0
-        // }
+        likeCount: {
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true }
 );
