@@ -3,9 +3,9 @@ const User = require('../models/user');
 
 module.exports = (req, res, next) => {
     const { authorization } = req.headers;
-  
+
     if (authorization === undefined) {
-        res.status(400).json({ errorMessage: '로그인 후 사용하시오' })
+        res.status(400).json({ errorMessage: '로그인 후 사용하시오' });
         return;
     }
 
@@ -19,20 +19,20 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const { userId } = jwt.verify(tokenValue, "my-secret-key");
-        
-        User.findOne({ userId }).exec().then((user) => {
-            res.locals.user = user;
+        const { userId } = jwt.verify(tokenValue, 'my-secret-key');
 
-            next();
+        User.findOne({ userId })
+            .exec()
+            .then((user) => {
+                res.locals.user = user;
 
-        });
-
-
-    } catch (error) {//jwt 토큰이 유효하지 않은 경우
+                next();
+            });
+    } catch (error) {
+        //jwt 토큰이 유효하지 않은 경우
         return res.status(401).send({
             user: null,
             errorMessage: '로그인 후 사용하시오',
         });
     }
-}
+};
