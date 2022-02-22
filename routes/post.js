@@ -12,9 +12,18 @@ router.post('/imagetest', upload.single('image'), (req, res) => {
 
 //게시물 작성
 router.post('/', async (req, res) => {
-    const { title, tag, contents, thumbnail, introduce } = req.body;
+    let { title, tag, contents, thumbnail, introduce } = req.body;
     //const thumbnail = req.file.location;
     //const { user } = res.locals;
+
+    if (title === undefined) {
+        res.status(400).json({ mssage: '제목을 입력해주세요.' });
+    }
+    if (tag === undefined) tag = [];
+    if (contents === undefined) contents = '';
+    if (thumbnail === undefined) thumbnail = '';
+    if (introduce === undefined) introduce = '';
+
     const user = { userId: Math.random().toString(36) };
     //    const user = { userId: 'testid' };
     await Post.create({
@@ -55,8 +64,16 @@ router.patch('/:postId', async (req, res) => {
     //const { user } = res.locals;
 
     const { postId } = req.params;
-    const { title, tag, contents, thumbnail, introduce } = req.body;
+    let { title, tag, contents, thumbnail, introduce } = req.body;
     //   const thumbnail = req.file.location;
+
+    if (title === undefined) {
+        res.status(400).json({ mssage: '제목을 입력해주세요.' });
+    }
+    if (tag === undefined) tag = [];
+    if (contents === undefined) contents = '';
+    if (thumbnail === undefined) thumbnail = '';
+    if (introduce === undefined) introduce = '';
 
     const targetPost = await Post.findOne({ _id: postId });
 
