@@ -16,15 +16,14 @@ const postSchema = mongoose.Schema(
         },
         contents: {
             type: String,
-            required: true,
+            //required: true,
         },
         thumbnail: {
             type: String,
-            required: true,
         },
         introduce: {
             type: String,
-            required: true,
+            //required: true,
         },
         // likeCount:{
         //     type:Number,
