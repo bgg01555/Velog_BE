@@ -1,6 +1,9 @@
 function time2str(date) {
     let today = new Date();
     let time = (today - date) / 1000 / 60; // 분
+    if (time <= 5) {
+        return '방금 전';
+    }
     if (time < 60) {
         return parseInt(time) + '분 전';
     }
@@ -11,10 +14,8 @@ function time2str(date) {
     time = time / 24;
     if (time < 8) {
         return parseInt(time) + '일 전';
-
     }
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 }
 
-module.exports=time2str;
-
+module.exports = time2str;

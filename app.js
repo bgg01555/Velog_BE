@@ -11,6 +11,17 @@ require('dotenv').config();
 
 connect();
 
+app.use((req, res, next) => {
+    console.log(
+        'Request URL:',
+        `[${req.method}]`,
+        req.originalUrl,
+        ' - ',
+        new Date().toLocaleString()
+    );
+    next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
