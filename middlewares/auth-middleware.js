@@ -2,8 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 module.exports = (req, res, next) => {
+    console.log('test2');
     const { authorization } = req.headers;
 
+    console.log('test2');
     if (authorization === undefined) {
         res.status(400).json({ errorMessage: '로그인 후 사용하시오' });
         return;

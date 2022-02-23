@@ -6,6 +6,7 @@ const auth = require('../middlewares/auth-middleware');
 const time2str = require('../modules/time2str');
 const upload = require('../modules/multer');
 
+//썸네일
 router.post('/imagetest', upload.single('image'), (req, res) => {
     res.json({ url: req.file.location });
 });
@@ -43,6 +44,7 @@ router.get('/:postId', async (req, res) => {
     const { postId } = req.params;
     const post = await Post.findOne({ _id: postId });
     post._doc.pastTime = time2str(post.createdAt);
+    post._doc.commentCnt = await Comment.count({ postId: postId });
     res.status(200).json({
         post,
     });
