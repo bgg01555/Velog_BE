@@ -38,8 +38,6 @@ router.get('/', async (req, res) => {
         posts[i]._doc.commentCnt = await Comment.count({ postId: posts[i]._id });
     }
 
-    console.log(posts);
-
     let today = new Date();
     let thisyear = today.getFullYear();
     let thismonth = today.getMonth();
@@ -80,7 +78,6 @@ router.get('/', async (req, res) => {
         });
     } else {
         posts.reverse();
-        console.log('test');
         return res.status(200).json({ posts });
     }
 
