@@ -30,13 +30,15 @@ router.post('/', auth, async (req, res) => {
 
 //전체 게시물 조회
 router.get('/', async (req, res) => {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).sort({ createdAt: 1 });
     let { category } = req.query;
 
     for (let i = 0; i < posts.length; i++) {
         posts[i]._doc.pastTime = time2str(posts[i].createdAt);
         posts[i]._doc.commentCnt = await Comment.count({ postId: posts[i]._id });
     }
+
+    console.log(posts);
 
     let today = new Date();
     let thisyear = today.getFullYear();
@@ -78,6 +80,7 @@ router.get('/', async (req, res) => {
         });
     } else {
         posts.reverse();
+        console.log('test');
         return res.status(200).json({ posts });
     }
 
