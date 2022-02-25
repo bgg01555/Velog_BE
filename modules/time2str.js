@@ -1,6 +1,9 @@
 function time2str(date) {
     let today = new Date();
     let time = (today - date) / 1000 / 60; // 분
+    if (time <= 5) {
+        return '방금 전';
+    }
     if (time < 60) {
         return parseInt(time) + '분 전';
     }

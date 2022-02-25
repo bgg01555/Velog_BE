@@ -30,24 +30,81 @@ router.post('/', auth, async (req, res) => {
 
 //전체 게시물 조회
 router.get('/', async (req, res) => {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).sort({ createdAt: 1 });
+    let { category } = req.query;
+
     for (let i = 0; i < posts.length; i++) {
         posts[i]._doc.pastTime = time2str(posts[i].createdAt);
         posts[i]._doc.commentCnt = await Comment.count({ postId: posts[i]._id });
     }
 
-    res.status(200).json({ posts });
+    let today = new Date();
+    let thisyear = today.getFullYear();
+    let thismonth = today.getMonth();
+    let weekstart, weekend;
+    let thisday = today.getDate();
+
+    weekstart = thisday - today.getDay();
+    weekend = weekstart + 6;
+
+    let filtered;
+
+    if (category === 'year') {
+        filtered = posts.filter((val) => {
+            return val.createdAt.getFullYear() === thisyear;
+        });
+    } else if (category === 'month') {
+        filtered = posts.filter((val) => {
+            return (
+                val.createdAt.getFullYear() === thisyear && val.createdAt.getMonth() === thismonth
+            );
+        });
+    } else if (category === 'week') {
+        filtered = posts.filter((val) => {
+            return (
+                val.createdAt.getFullYear() === thisyear &&
+                val.createdAt.getMonth() === thismonth &&
+                val.createdAt.getDate() >= weekstart &&
+                val.createdAt.getDate() <= weekend
+            );
+        });
+    } else if (category === 'day') {
+        filtered = posts.filter((val) => {
+            return (
+                val.createdAt.getFullYear() === thisyear &&
+                val.createdAt.getMonth() === thismonth &&
+                val.createdAt.getDate() === thisday
+            );
+        });
+    } else {
+        posts.reverse();
+        return res.status(200).json({ posts });
+    }
+
+    return res.status(200).json({
+        posts: filtered.sort((a, b) => {
+            if (a.likeCount < b.likeCount) return 1;
+            else return -1;
+        }),
+    });
 });
 
 //특정 게시물 조회
 router.get('/:postId', async (req, res) => {
     const { postId } = req.params;
     const post = await Post.findOne({ _id: postId });
-    post._doc.pastTime = time2str(post.createdAt);
-    post._doc.commentCnt = await Comment.count({ postId: postId });
-    res.status(200).json({
-        post,
-    });
+
+    try {
+        post._doc.pastTime = time2str(post.createdAt);
+        post._doc.commentCnt = await Comment.count({ postId: postId });
+        res.status(200).json({
+            post,
+        });
+    } catch (err) {
+        res.status(404).json({
+            message: '삭제된 게시물 입니다.',
+        });
+    }
 });
 
 //특정 게시물 수정
